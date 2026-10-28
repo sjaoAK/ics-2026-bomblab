@@ -3,6 +3,7 @@ phase_1
     ![phase1公开seed](img/phase1公开.png)
     ![phase1非公开seed](img/phase1非公开.png)
     推理：
+    ```asm
     1.  402028:	push   %r12   //把r12原有的内容压入栈，结束后要复原
         40202a:	mov    %rsi,%r12    //rsi中的challenge存入r12
         40202d:	mov    $0x1,%esi    //esi存整数1     
@@ -45,12 +46,14 @@ phase_1
         0x0000000000401fd7 <+7>:     add    %esi,%eax
         0x0000000000401fd9 <+9>:     xor    $0xcebf,%eax
     6.  最后取s2放入values[0],count=1只输出一个数字
+    ```
 
 phase2
     运行结果：
     ![phase2公开seed](img/phase2公开.png)
     ![phase2非公开seed](img/phase2非公开.png)
     推理：
+    ```asm
     1.  //rsi(challenge)存入r13,rdi(*out)存入r12,6u存入esi
         402088:	push   %r13
         40208a:	mov    %rsi,%r13
@@ -99,12 +102,14 @@ phase2
             values[i] = vi;
             pre = vi;
             shift += 5;"
+    ```
 
 phase3
     运行结果：
     ![phase3公开seed](img/phase3公开.png)
     ![phase3非公开seed](img/phase3非公开.png)
     推理：
+    ```asm
     1.  40225a:	mov    %rsi,%r12    //challenge存入r12
         40225d:	mov    $0x2,%esi
         402263:	mov    %rdi,%rbx    //*out存入rbx
@@ -182,12 +187,14 @@ phase3
             0x00000000004021b4 <p3_case_5+4>:    lea    0xcdf8(%rdi,%rdi,4),%eax
             0x00000000004021bb <p3_case_5+11>:   ret
         //5 * arg + 0xcdf8u
+    ```
 
 phase4
     运行结果：
     ![phase4公开seed](img/phase4公开.png)
     ![phase4非公开seed](img/phase4非公开.png)
     推理：
+    ```asm
     1.  challenge--r12,*out--rbx
     2.  402388:	mov    %r12,%rcx
         40238b:	mov    %r12,%rax
@@ -245,12 +252,14 @@ phase4
         402336 <+102>:   xor    %ecx,%eax               //eax=(mid_238)^d
         //对应defuser.c中return (mid + 0xeeu) ^ d;
         402338 <+104>:   ret
+    ```
 
 phase5
     运行结果：
     ![phase5公开seed](img/phase5公开.png)
     ![phase5非公开seed](img/phase5非公开.png)
     推理：
+    ```asm
     1.  challenge--r12,rdi,*out--rbx
     2.  p5_traverse:
         4023c4 <+4>:     mov    %rdi,%rax   //rax=challenge
@@ -303,12 +312,14 @@ phase5
         402484:	cmp    %eax,-0x18(%rbp)         //比较局部变量(rbp-0x18，即第二个整数)与 eax
         402487:	sete   %al
         40248a:	jmp    402445 <phase_05+0x25>
+    ```
 
 phase6
     运行结果：
     ![phase6公开seed](img/phase6公开.png)
     ![phase6非公开seed](img/phase6非公开.png)
     推理：
+    ```asm
     1.  rsi,r12--challenge,esi--1,rdi,rbx--*out
         随后"4025a8:	mov    %r12,%rdi"   rdi--challenge
     2.  p6_dispatch:
@@ -390,12 +401,14 @@ phase6
             0x00000000004024c9 <+9>:     ret
         End of assembler dump.
         //case 7:  res2 = (mid >> 7) | (mid << 25);
+    ```
 
 solve_secret:
     运行结果：
     ![secret phase](img/secret phase.png)
     ![全部结果](img/全部.png)
     推理：
+    ```asm
     1.secret_gate:
         4026cf:	push   %r14
         4026d1:	mov    %rdx,%r14            //(r14)context
@@ -521,4 +534,5 @@ solve_secret:
         4025c9:	add    $0xbb45,%eax         //(eax)rol += 0xbb45u
         4025ce:	xor    $0xb3c5,%eax         //(eax)rol ^= 0xb3c5u
         4025d3:	ret
+    ```
 课程辅助工具AI用途：翻译部分汇编代码的意思，纠正defuser.c填写错误

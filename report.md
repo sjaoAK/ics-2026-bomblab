@@ -453,7 +453,7 @@
 
 **运行结果：**
 
-![secret phase](img/secret phase.png)
+![secret phase](img/secret%20phase.png)
 
 ![全部结果](img/全部.png)
 
